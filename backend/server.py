@@ -290,10 +290,13 @@ async def create_payment_order(set_number: int, user_id: str):
     # Amount in paise (100 rupees = 10000 paise)
     amount = 10000  # ₹100
     
+    # Create shorter receipt ID (max 40 characters)
+    receipt_id = f"set{set_number}_{uuid.uuid4().hex[:20]}"
+    
     order_data = {
         'amount': amount,
         'currency': 'INR',
-        'receipt': f'set_{set_number}_user_{user_id}_{uuid.uuid4().hex[:8]}',
+        'receipt': receipt_id,
         'notes': {
             'set_number': set_number,
             'user_id': user_id
