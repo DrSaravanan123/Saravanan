@@ -141,35 +141,6 @@ const TestPage = () => {
             <ChevronLeft className="mr-2 w-4 h-4" />
             Back to Home
           </Button>
-          <Card className="p-6 bg-white/80 backdrop-blur-md">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <h1 className="text-2xl font-bold text-indigo-900">Complete Set 1 - Paper I</h1>
-                <p className="text-sm text-gray-600">Total: 130 Questions | 200 Marks</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">Time Left</p>
-                  <div
-                    data-testid="timer"
-                    className={`text-2xl font-bold ${
-                      timeLeft < 600 ? "text-red-600" : "text-indigo-900"
-                    } flex items-center gap-2`}
-                  >
-                    <Clock className="w-6 h-6" />
-                    {formatTime(timeLeft)}
-                  </div>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">Answered</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {answeredCount}/{allQuestions.length}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
 
         <Tabs value={currentSection} onValueChange={(val) => { setCurrentSection(val); setCurrentIndex(0); }}>
           <TabsList className="grid w-full grid-cols-2 mb-6">
