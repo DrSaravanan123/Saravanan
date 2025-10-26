@@ -62,13 +62,15 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [setsRes, usersRes, attemptsRes] = await Promise.all([
+      const [setsRes, usersRes, attemptsRes, materialsRes] = await Promise.all([
         axios.get(`${API}/admin/question-sets`),
         axios.get(`${API}/admin/users`),
-        axios.get(`${API}/admin/test-attempts`)
+        axios.get(`${API}/admin/test-attempts`),
+        axios.get(`${API}/study-materials`)
       ]);
       setQuestionSets(setsRes.data.sets);
       setStats({ users: usersRes.data.users, attempts: attemptsRes.data.attempts });
+      setStudyMaterials(materialsRes.data.materials);
     } catch (error) {
       toast.error("Failed to fetch data");
     }
