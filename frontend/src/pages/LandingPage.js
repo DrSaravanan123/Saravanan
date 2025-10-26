@@ -370,10 +370,10 @@ const LandingPage = () => {
         </Card>
       </section>
 
-      {/* Contact Info */}
+      {/* Footer */}
       <footer className="bg-indigo-900 text-white py-8 mt-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h4 className="font-semibold text-lg mb-4">Contact Information</h4>
               <div className="space-y-2">
@@ -394,6 +394,29 @@ const LandingPage = () => {
                 Physics Master is a dedicated platform for TRB Assistant Professor aspirants.
                 Prepare with expert-designed mock tests and detailed analysis.
               </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => navigate("/admin")}
+                  className="block text-sm hover:text-indigo-300 underline"
+                >
+                  Admin Panel
+                </button>
+                <button
+                  onClick={() => navigate("/study-materials")}
+                  className="block text-sm hover:text-indigo-300"
+                >
+                  Study Materials
+                </button>
+                <button
+                  onClick={() => setShowFeedback(true)}
+                  className="block text-sm hover:text-indigo-300"
+                >
+                  Give Feedback
+                </button>
+              </div>
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-indigo-800 text-center text-sm opacity-75">
