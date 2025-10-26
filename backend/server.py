@@ -253,6 +253,127 @@ async def get_stats():
         "total_attempts": total_attempts
     }
 
+# ==================== ADMIN ROUTES ====================
+
+class AdminLogin(BaseModel):
+    username: str
+    password: str
+
+class QuestionSetCreate(BaseModel):
+    set_number: int
+    set_name: str
+    tamil_questions: List[Dict[str, Any]]
+    physics_questions: List[Dict[str, Any]]
+    price: int = 100
+    is_active: bool = True
+
+class QuestionUpdate(BaseModel):
+    question_text: Optional[str] = None
+    options: Optional[List[QuestionOption]] = None
+    correct_answer: Optional[str] = None
+    marks: Optional[float] = None
+
+@api_router.post("/admin/login")
+async def admin_login(credentials: AdminLogin):
+    # Simple admin authentication - you can change these credentials
+    ADMIN_USERNAME = "admin"
+    ADMIN_PASSWORD = "admin123"  # Change this to a secure password
+    
+    if credentials.username == ADMIN_USERNAME and credentials.password == ADMIN_PASSWORD:
+        return {"success": True, "message": "Admin logged in successfully"}
+    else:
+        raise HTTPException(status_code=401, detail="Invalid admin credentials")
+
+@api_router.get("/admin/question-sets")
+async def get_all_question_sets():
+    # Get unique set numbers from questions
+    tamil_sets = await db.questions.distinct("set_number", {"subject": "tamil"})
+    physics_sets = await db.questions.distinct("set_number", {"subject": "physics"})
+    
+    all_sets = set(tamil_sets + physics_sets)
+    
+    sets_data = []
+    for set_num in sorted(all_sets):
+        tamil_count = await db.questions.count_documents({"subject": "tamil", "set_number": set_num})
+        physics_count = await db.questions.count_documents({"subject": "physics", "set_number": set_num})
+        
+        sets_data.append({
+            "set_number": set_num,
+            "set_name": f"Set {set_num}",
+            "tamil_questions": tamil_count,
+            "physics_questions": physics_count,
+            "total_questions": tamil_count + physics_count,
+            "price": 100,
+            "is_active": True
+        })
+    
+    return {"sets": sets_data}
+
+@api_router.get("/admin/questions")
+async def get_all_questions(subject: Optional[str] = None, set_number: Optional[int] = None):
+    query = {}
+    if subject:
+        query["subject"] = subject
+    if set_number:
+        query["set_number"] = set_number
+    
+    questions = await db.questions.find(query, {"_id": 0}).to_list(None)
+    return {"questions": questions}
+
+@api_router.post("/admin/questions/bulk")
+async def add_questions_bulk(questions_data: List[Dict[str, Any]]):
+    # Add set_number to each question if not present
+    for q in questions_data:
+        if "set_number" not in q:
+            q["set_number"] = 1
+        if "id" not in q:
+            q["id"] = str(uuid.uuid4())
+    
+    await db.questions.insert_many(questions_data)
+    return {"message": f"Added {len(questions_data)} questions successfully"}
+
+@api_router.put("/admin/questions/{question_id}")
+async def update_question(question_id: str, update_data: QuestionUpdate):
+    update_dict = {k: v for k, v in update_data.model_dump().items() if v is not None}
+    
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No update data provided")
+    
+    result = await db.questions.update_one({"id": question_id}, {"$set": update_dict})
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    return {"message": "Question updated successfully"}
+
+@api_router.delete("/admin/questions/{question_id}")
+async def delete_question(question_id: str):
+    result = await db.questions.delete_one({"id": question_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    return {"message": "Question deleted successfully"}
+
+@api_router.delete("/admin/question-sets/{set_number}")
+async def delete_question_set(set_number: int):
+    result = await db.questions.delete_many({"set_number": set_number})
+    
+    return {
+        "message": f"Deleted set {set_number} successfully",
+        "deleted_count": result.deleted_count
+    }
+
+@api_router.get("/admin/users")
+async def get_all_users():
+    users = await db.users.find({}, {"_id": 0, "password": 0}).to_list(None)
+    return {"users": users}
+
+@api_router.get("/admin/test-attempts")
+async def get_all_attempts():
+    attempts = await db.test_attempts.find({}, {"_id": 0}).to_list(None)
+    return {"attempts": attempts}
+
 app.include_router(api_router)
 
 app.add_middleware(
