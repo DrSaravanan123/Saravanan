@@ -11,6 +11,8 @@ import uuid
 from datetime import datetime, timezone
 import bcrypt
 import random
+import hmac
+import hashlib
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
