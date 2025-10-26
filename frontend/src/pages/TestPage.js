@@ -21,10 +21,40 @@ const TestPage = () => {
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(10800);
   const [loading, setLoading] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
 
   useEffect(() => {
-    fetchQuestions();
+    checkAccessAndFetchQuestions();
   }, []);
+
+  const checkAccessAndFetchQuestions = async () => {
+    const savedUser = localStorage.getItem("user");
+    
+    if (!savedUser) {
+      toast.error("Please login to access the full test");
+      navigate("/");
+      return;
+    }
+
+    const user = JSON.parse(savedUser);
+
+    try {
+      // Check if user has access to Set 1
+      const accessResponse = await axios.get(`${API}/payment/check-access/${user.id}/1`);
+      
+      if (!accessResponse.data.has_access) {
+        toast.error("Please purchase Set 1 to access this test");
+        navigate("/");
+        return;
+      }
+
+      setHasAccess(true);
+      fetchQuestions();
+    } catch (error) {
+      toast.error("Failed to verify access");
+      navigate("/");
+    }
+  };
 
   useEffect(() => {
     if (timeLeft > 0 && (tamilQuestions.length > 0 || physicsQuestions.length > 0)) {
