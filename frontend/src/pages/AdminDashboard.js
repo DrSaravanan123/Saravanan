@@ -24,6 +24,15 @@ const AdminDashboard = () => {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(null);
   const [stats, setStats] = useState({ users: [], attempts: [] });
+  const [studyMaterials, setStudyMaterials] = useState([]);
+  const [showMaterialDialog, setShowMaterialDialog] = useState(false);
+  const [newMaterial, setNewMaterial] = useState({
+    title: "",
+    description: "",
+    file_url: "",
+    file_type: "pdf",
+    subject: "general"
+  });
 
   useEffect(() => {
     const adminAuth = localStorage.getItem("adminAuth");
