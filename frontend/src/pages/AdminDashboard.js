@@ -26,12 +26,17 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({ users: [], attempts: [] });
   const [studyMaterials, setStudyMaterials] = useState([]);
   const [showMaterialDialog, setShowMaterialDialog] = useState(false);
+  const [showAddSetDialog, setShowAddSetDialog] = useState(false);
   const [newMaterial, setNewMaterial] = useState({
     title: "",
     description: "",
     file_url: "",
     file_type: "pdf",
     subject: "general"
+  });
+  const [newSetData, setNewSetData] = useState({
+    set_number: 2,
+    questions_file: null
   });
 
   useEffect(() => {
