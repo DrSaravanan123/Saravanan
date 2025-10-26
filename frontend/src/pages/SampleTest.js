@@ -137,36 +137,6 @@ const SampleTest = () => {
             <ChevronLeft className="mr-2 w-4 h-4" />
             Back to Home
           </Button>
-          <Card className="p-6 bg-white/80 backdrop-blur-md">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <h1 className="text-2xl font-bold text-indigo-900">Sample Test - 10 Questions</h1>
-                <p className="text-sm text-gray-600">Physics Questions | Total Marks: 15</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">Time Left</p>
-                  <div
-                    data-testid="timer"
-                    className={`text-2xl font-bold ${
-                      timeLeft < 60 ? "text-red-600" : "text-indigo-900"
-                    } flex items-center gap-2`}
-                  >
-                    <Clock className="w-6 h-6" />
-                    {formatTime(timeLeft)}
-                  </div>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">Answered</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {answeredCount}/{questions.length}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <Progress value={progress} className="mt-4" />
-          </Card>
-        </div>
 
         <Card className="p-8 mb-6 bg-white shadow-xl">
           <div className="mb-6">
