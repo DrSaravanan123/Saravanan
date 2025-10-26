@@ -101,6 +101,13 @@ const LandingPage = () => {
   const handlePayment = async () => {
     setProcessingPayment(true);
     
+    // Check if Razorpay script is loaded
+    if (!window.Razorpay) {
+      toast.error("Payment system loading... Please try again in a moment");
+      setProcessingPayment(false);
+      return;
+    }
+    
     try {
       // Create Razorpay order
       const orderResponse = await axios.post(`${API}/payment/create-order`, null, {
@@ -136,7 +143,7 @@ const LandingPage = () => {
             setProcessingPayment(false);
             navigate("/full-test");
           } catch (error) {
-            toast.error("Payment verification failed");
+            toast.error("Payment verification failed. Please contact support.");
             setProcessingPayment(false);
           }
         },
@@ -155,9 +162,14 @@ const LandingPage = () => {
       };
 
       const razorpay = new window.Razorpay(options);
+      razorpay.on('payment.failed', function (response){
+        toast.error("Payment failed. Please try again.");
+        setProcessingPayment(false);
+      });
       razorpay.open();
     } catch (error) {
-      toast.error("Failed to initiate payment");
+      console.error("Payment error:", error);
+      toast.error(error.response?.data?.detail || "Failed to initiate payment. Please try again.");
       setProcessingPayment(false);
     }
   };
