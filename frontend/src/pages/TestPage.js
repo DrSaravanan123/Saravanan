@@ -141,6 +141,7 @@ const TestPage = () => {
             <ChevronLeft className="mr-2 w-4 h-4" />
             Back to Home
           </Button>
+        </div>
 
         <Tabs value={currentSection} onValueChange={(val) => { setCurrentSection(val); setCurrentIndex(0); }}>
           <TabsList className="grid w-full grid-cols-2 mb-6">
