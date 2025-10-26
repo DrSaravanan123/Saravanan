@@ -212,9 +212,10 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs defaultValue="sets">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="sets">Question Sets</TabsTrigger>
             <TabsTrigger value="questions">Manage Questions</TabsTrigger>
+            <TabsTrigger value="materials">Study Materials</TabsTrigger>
             <TabsTrigger value="users">Users & Stats</TabsTrigger>
           </TabsList>
 
