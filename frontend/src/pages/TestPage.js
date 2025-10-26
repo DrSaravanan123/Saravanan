@@ -171,8 +171,9 @@ const TestPage = () => {
               </div>
 
               <RadioGroup
+                key={currentQuestion.id}
                 data-testid="options-group"
-                value={answers[currentQuestion.id]}
+                value={answers[currentQuestion.id] || ""}
                 onValueChange={(value) => handleAnswerChange(currentQuestion.id, value)}
               >
                 <div className="space-y-4">
