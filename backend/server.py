@@ -276,6 +276,110 @@ async def submit_feedback(feedback_data: FeedbackCreate):
     await db.feedback.insert_one(doc)
     return {"message": "Feedback submitted successfully", "id": feedback.id}
 
+# ==================== PAYMENT ROUTES ====================
+
+@api_router.post("/payment/create-order")
+async def create_payment_order(set_number: int, user_id: str):
+    import razorpay
+    
+    razorpay_key = os.environ.get('RAZORPAY_KEY_ID')
+    razorpay_secret = os.environ.get('RAZORPAY_KEY_SECRET')
+    
+    client = razorpay.Client(auth=(razorpay_key, razorpay_secret))
+    
+    # Amount in paise (100 rupees = 10000 paise)
+    amount = 10000  # ₹100
+    
+    order_data = {
+        'amount': amount,
+        'currency': 'INR',
+        'receipt': f'set_{set_number}_user_{user_id}_{uuid.uuid4().hex[:8]}',
+        'notes': {
+            'set_number': set_number,
+            'user_id': user_id
+        }
+    }
+    
+    order = client.order.create(data=order_data)
+    
+    return {
+        "order_id": order['id'],
+        "amount": order['amount'],
+        "currency": order['currency'],
+        "key_id": razorpay_key
+    }
+
+@api_router.post("/payment/verify")
+async def verify_payment(verification: PaymentVerification):
+    razorpay_secret = os.environ.get('RAZORPAY_KEY_SECRET')
+    
+    # Verify signature
+    generated_signature = hmac.new(
+        razorpay_secret.encode(),
+        f"{verification.razorpay_order_id}|{verification.razorpay_payment_id}".encode(),
+        hashlib.sha256
+    ).hexdigest()
+    
+    if generated_signature != verification.razorpay_signature:
+        raise HTTPException(status_code=400, detail="Invalid payment signature")
+    
+    # Payment verified - grant access
+    access_doc = {
+        "id": str(uuid.uuid4()),
+        "user_id": verification.user_id,
+        "set_number": verification.set_number,
+        "payment_id": verification.razorpay_payment_id,
+        "order_id": verification.razorpay_order_id,
+        "amount": 100,
+        "purchased_at": datetime.now(timezone.utc).isoformat(),
+        "is_active": True
+    }
+    
+    await db.purchased_sets.insert_one(access_doc)
+    
+    return {
+        "success": True,
+        "message": "Payment verified successfully",
+        "set_number": verification.set_number
+    }
+
+@api_router.get("/payment/check-access/{user_id}/{set_number}")
+async def check_set_access(user_id: str, set_number: int):
+    # Check if user has purchased this set
+    access = await db.purchased_sets.find_one({
+        "user_id": user_id,
+        "set_number": set_number,
+        "is_active": True
+    })
+    
+    return {"has_access": access is not None}
+
+# ==================== STUDY MATERIALS ====================
+
+@api_router.get("/study-materials")
+async def get_study_materials(subject: Optional[str] = None):
+    query = {"is_active": True}
+    if subject:
+        query["subject"] = subject
+    
+    materials = await db.study_materials.find(query, {"_id": 0}).to_list(None)
+    return {"materials": materials}
+
+@api_router.post("/admin/study-materials")
+async def add_study_material(material_data: StudyMaterialCreate):
+    material = StudyMaterial(**material_data.model_dump())
+    doc = material.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.study_materials.insert_one(doc)
+    return {"message": "Study material added successfully", "id": material.id}
+
+@api_router.delete("/admin/study-materials/{material_id}")
+async def delete_study_material(material_id: str):
+    result = await db.study_materials.delete_one({"id": material_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Material not found")
+    return {"message": "Study material deleted successfully"}
+
 # ==================== STATS ====================
 
 @api_router.get("/stats")
