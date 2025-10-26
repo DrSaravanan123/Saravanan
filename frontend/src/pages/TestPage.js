@@ -98,7 +98,39 @@ const TestPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
-      <div className="max-w-5xl mx-auto px-4">
+      {/* Fixed Timer Bar */}
+      <div className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 border-b-2 border-indigo-200">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <h2 className="text-lg font-bold text-indigo-900">Complete Set 1 - Paper I</h2>
+            <div className="text-sm text-gray-600">
+              {currentSection === "tamil" ? "Tamil" : "Physics"} - Q{currentIndex + 1}
+            </div>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="text-center">
+              <p className="text-xs text-gray-600">Time Left</p>
+              <div
+                data-testid="timer"
+                className={`text-xl font-bold ${
+                  timeLeft < 600 ? "text-red-600" : "text-indigo-900"
+                } flex items-center gap-2`}
+              >
+                <Clock className="w-5 h-5" />
+                {formatTime(timeLeft)}
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-gray-600">Answered</p>
+              <p className="text-xl font-bold text-green-600">
+                {answeredCount}/{allQuestions.length}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 pt-24">{/* Added pt-24 for fixed header */}
         <div className="mb-6">
           <Button
             data-testid="back-button"
