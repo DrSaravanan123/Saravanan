@@ -78,6 +78,14 @@ const LandingPage = () => {
           </div>
           <div className="flex gap-3">
             <Button
+              variant="ghost"
+              onClick={() => navigate("/study-materials")}
+              className="gap-2"
+            >
+              <BookOpen className="w-4 h-4" />
+              Study Materials
+            </Button>
+            <Button
               data-testid="share-button"
               variant="outline"
               size="sm"
