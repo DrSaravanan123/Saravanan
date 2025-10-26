@@ -67,7 +67,100 @@ const LandingPage = () => {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+    
+    // Load Razorpay script
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
+
+  const handleFullTestAccess = async () => {
+    // Check if user is logged in
+    if (!user) {
+      toast.error("Please login first to access the full test");
+      setShowAuth(true);
+      return;
+    }
+
+    // Check if user has already purchased Set 1
+    try {
+      const response = await axios.get(`${API}/payment/check-access/${user.id}/1`);
+      if (response.data.has_access) {
+        // User has access, go to test
+        navigate("/full-test");
+      } else {
+        // Show payment dialog
+        setShowPayment(true);
+      }
+    } catch (error) {
+      toast.error("Failed to check access");
+    }
+  };
+
+  const handlePayment = async () => {
+    setProcessingPayment(true);
+    
+    try {
+      // Create Razorpay order
+      const orderResponse = await axios.post(`${API}/payment/create-order`, null, {
+        params: {
+          set_number: 1,
+          user_id: user.id
+        }
+      });
+
+      const { order_id, amount, currency, key_id } = orderResponse.data;
+
+      // Razorpay options
+      const options = {
+        key: key_id,
+        amount: amount,
+        currency: currency,
+        name: "Physics Master",
+        description: "TRB Mock Test - Complete Set 1",
+        order_id: order_id,
+        handler: async function (response) {
+          // Payment successful, verify it
+          try {
+            await axios.post(`${API}/payment/verify`, {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              user_id: user.id,
+              set_number: 1
+            });
+
+            toast.success("Payment successful! You now have access to Set 1");
+            setShowPayment(false);
+            setProcessingPayment(false);
+            navigate("/full-test");
+          } catch (error) {
+            toast.error("Payment verification failed");
+            setProcessingPayment(false);
+          }
+        },
+        prefill: {
+          name: user.username,
+          email: user.email,
+        },
+        theme: {
+          color: "#4F46E5"
+        },
+        modal: {
+          ondismiss: function() {
+            setProcessingPayment(false);
+          }
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      toast.error("Failed to initiate payment");
+      setProcessingPayment(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
