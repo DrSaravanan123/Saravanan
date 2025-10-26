@@ -76,6 +76,7 @@ const TestPage = () => {
       setLoading(false);
     } catch (error) {
       toast.error("Failed to load questions");
+      setLoading(false);
     }
   };
 
