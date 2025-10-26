@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import SampleTest from "./pages/SampleTest";
 import TestPage from "./pages/TestPage";
 import ResultsPage from "./pages/ResultsPage";
+import AdminDashboard from "./pages/AdminDashboard";
 import { Toaster } from "./components/ui/sonner";
 import "./App.css";
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/sample-test" element={<SampleTest />} />
           <Route path="/full-test" element={<TestPage />} />
           <Route path="/results/:attemptId" element={<ResultsPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-center" />
