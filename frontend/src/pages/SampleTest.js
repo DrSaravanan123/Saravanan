@@ -137,6 +137,7 @@ const SampleTest = () => {
             <ChevronLeft className="mr-2 w-4 h-4" />
             Back to Home
           </Button>
+        </div>
 
         <Card className="p-8 mb-6 bg-white shadow-xl">
           <div className="mb-6">
