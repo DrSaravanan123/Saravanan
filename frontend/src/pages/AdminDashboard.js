@@ -468,6 +468,67 @@ const AdminDashboard = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Add Material Dialog */}
+      <Dialog open={showMaterialDialog} onOpenChange={setShowMaterialDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Study Material</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Title</Label>
+              <Input
+                value={newMaterial.title}
+                onChange={(e) => setNewMaterial({ ...newMaterial, title: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea
+                value={newMaterial.description}
+                onChange={(e) => setNewMaterial({ ...newMaterial, description: e.target.value })}
+                rows={3}
+              />
+            </div>
+            <div>
+              <Label>File URL</Label>
+              <Input
+                value={newMaterial.file_url}
+                onChange={(e) => setNewMaterial({ ...newMaterial, file_url: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <Label>File Type</Label>
+              <select
+                className="w-full p-2 border rounded"
+                value={newMaterial.file_type}
+                onChange={(e) => setNewMaterial({ ...newMaterial, file_type: e.target.value })}
+              >
+                <option value="pdf">PDF</option>
+                <option value="video">Video</option>
+                <option value="notes">Notes</option>
+              </select>
+            </div>
+            <div>
+              <Label>Subject</Label>
+              <select
+                className="w-full p-2 border rounded"
+                value={newMaterial.subject}
+                onChange={(e) => setNewMaterial({ ...newMaterial, subject: e.target.value })}
+              >
+                <option value="general">General</option>
+                <option value="tamil">Tamil</option>
+                <option value="physics">Physics</option>
+              </select>
+            </div>
+            <Button onClick={addStudyMaterial} className="w-full">
+              Add Material
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
