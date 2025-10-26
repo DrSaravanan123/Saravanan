@@ -318,6 +318,7 @@ const LandingPage = () => {
             <p className="text-gray-700"><strong>Grand Total:</strong> 200 marks | <strong>Time Limit:</strong> 3 hours</p>
             <p className="text-sm text-gray-600 mt-2 tamil-text">* பதிவு செய்த பயனர்கள் தேர்வை எத்தனை முறை வேண்டுமானாலும் எழுதலாம்</p>
             <p className="text-sm text-indigo-600 mt-1">* More question sets coming soon!</p>
+            <p className="text-lg font-bold text-green-600 mt-3">💳 Price: ₹100 only (One-time payment)</p>
           </div>
         </Card>
       </section>
