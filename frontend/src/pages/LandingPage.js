@@ -491,6 +491,53 @@ const LandingPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Payment Dialog */}
+      <Dialog open={showPayment} onOpenChange={setShowPayment}>
+        <DialogContent data-testid="payment-dialog">
+          <DialogHeader>
+            <DialogTitle>Purchase Complete Set 1</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-indigo-50 p-6 rounded-lg">
+              <h3 className="text-2xl font-bold text-indigo-900 mb-4">Complete Set 1 - Paper I</h3>
+              <div className="space-y-2 text-gray-700">
+                <p>✓ <strong>30 Tamil Questions</strong> (50 marks)</p>
+                <p>✓ <strong>100 Physics Questions</strong> (150 marks)</p>
+                <p>✓ <strong>Total: 200 marks</strong></p>
+                <p>✓ 3 hours time limit</p>
+                <p>✓ Detailed question-wise analysis</p>
+                <p>✓ <strong>Unlimited attempts</strong></p>
+              </div>
+              <div className="mt-6 pt-6 border-t border-indigo-200">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-semibold">Total Amount:</span>
+                  <span className="text-3xl font-bold text-green-600">₹100</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-sm text-gray-600">
+              <p>💳 <strong>Payment Methods:</strong> UPI, Cards, Net Banking</p>
+              <p>🔒 <strong>Secure Payment</strong> powered by Razorpay</p>
+              <p>✅ <strong>Instant Access</strong> after successful payment</p>
+            </div>
+
+            <Button
+              data-testid="proceed-payment-button"
+              onClick={handlePayment}
+              disabled={processingPayment}
+              className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
+            >
+              {processingPayment ? "Processing..." : "Proceed to Payment ₹100"}
+            </Button>
+            
+            <p className="text-xs text-center text-gray-500">
+              By proceeding, you agree to our terms and conditions
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
