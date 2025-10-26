@@ -133,6 +133,36 @@ const AdminDashboard = () => {
     }
   };
 
+  const addStudyMaterial = async () => {
+    try {
+      await axios.post(`${API}/admin/study-materials`, newMaterial);
+      toast.success("Study material added successfully");
+      setShowMaterialDialog(false);
+      setNewMaterial({
+        title: "",
+        description: "",
+        file_url: "",
+        file_type: "pdf",
+        subject: "general"
+      });
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to add study material");
+    }
+  };
+
+  const deleteMaterial = async (materialId) => {
+    if (!window.confirm("Are you sure you want to delete this material?")) return;
+    
+    try {
+      await axios.delete(`${API}/admin/study-materials/${materialId}`);
+      toast.success("Material deleted successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to delete material");
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
