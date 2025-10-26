@@ -5,6 +5,7 @@ import SampleTest from "./pages/SampleTest";
 import TestPage from "./pages/TestPage";
 import ResultsPage from "./pages/ResultsPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import StudyMaterials from "./pages/StudyMaterials";
 import { Toaster } from "./components/ui/sonner";
 import "./App.css";
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/full-test" element={<TestPage />} />
           <Route path="/results/:attemptId" element={<ResultsPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/study-materials" element={<StudyMaterials />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-center" />
