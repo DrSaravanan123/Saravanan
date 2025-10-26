@@ -211,9 +211,25 @@ const LandingPage = () => {
                 Login / Register
               </Button>
             ) : (
-              <Button variant="outline" data-testid="user-profile">
-                👤 {user.username}
-              </Button>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-700">
+                  👤 {user.username}
+                </span>
+                <Button
+                  data-testid="logout-button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    setUser(null);
+                    toast.success("Logged out successfully!");
+                    navigate("/");
+                  }}
+                  className="text-red-600 border-red-600 hover:bg-red-50"
+                >
+                  Logout
+                </Button>
+              </div>
             )}
           </div>
         </div>
