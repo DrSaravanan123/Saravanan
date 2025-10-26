@@ -18,9 +18,11 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [showAuth, setShowAuth] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [user, setUser] = useState(null);
   const [authForm, setAuthForm] = useState({ username: "", email: "", password: "" });
   const [feedbackForm, setFeedbackForm] = useState({ name: "", email: "", message: "", rating: 5 });
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   const handleAuth = async (type) => {
     try {
