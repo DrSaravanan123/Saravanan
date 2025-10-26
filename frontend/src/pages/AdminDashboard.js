@@ -352,6 +352,45 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
+          <TabsContent value="materials" className="mt-6">
+            <Card className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-indigo-900">Study Materials</h2>
+                <Button onClick={() => setShowMaterialDialog(true)} className="gap-2">
+                  <Plus className="w-4 h-4" />
+                  Add Material
+                </Button>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                {studyMaterials.map((material) => (
+                  <Card key={material.id} className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg">{material.title}</h3>
+                        <p className="text-sm text-gray-600 mt-1">{material.description}</p>
+                        <div className="flex gap-2 mt-2">
+                          <span className="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded">
+                            {material.subject}
+                          </span>
+                          <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                            {material.file_type}
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => deleteMaterial(material.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="users" className="mt-6">
             <Card className="p-6">
               <h2 className="text-2xl font-bold text-indigo-900 mb-6">Registered Users</h2>
