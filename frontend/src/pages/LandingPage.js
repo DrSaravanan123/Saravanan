@@ -237,7 +237,7 @@ const LandingPage = () => {
               data-testid="full-test-button"
               size="lg"
               variant="outline"
-              onClick={() => navigate("/full-test")}
+              onClick={handleFullTestAccess}
               className="border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 text-lg px-8 py-6"
             >
               <Award className="mr-2 w-5 h-5" />
