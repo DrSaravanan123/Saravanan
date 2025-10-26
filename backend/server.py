@@ -101,6 +101,38 @@ class FeedbackCreate(BaseModel):
     message: str
     rating: Optional[int] = None
 
+class PaymentOrder(BaseModel):
+    amount: int
+    currency: str = "INR"
+    receipt: str
+    
+class PaymentVerification(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
+    user_id: str
+    set_number: int
+
+class StudyMaterial(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: str
+    file_url: Optional[str] = None
+    file_type: str  # "pdf", "video", "notes"
+    subject: str  # "tamil", "physics", "general"
+    set_number: Optional[int] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    is_active: bool = True
+
+class StudyMaterialCreate(BaseModel):
+    title: str
+    description: str
+    file_url: Optional[str] = None
+    file_type: str
+    subject: str
+    set_number: Optional[int] = None
+
 # ==================== AUTH ROUTES ====================
 
 @api_router.post("/auth/register", response_model=UserResponse)
